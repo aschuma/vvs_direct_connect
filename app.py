@@ -1,16 +1,23 @@
 
 from os import getenv
 from datetime import datetime, timedelta
-from flask import Flask, Response, jsonify
+from flask import Flask, jsonify
 from flask.helpers import make_response
+from waitress import serve
 from vvspy.trip import get_trips
 
 
-from_id = int(getenv("VVS_FROM", 5006333))
-to_id = int(getenv("VVS_TO", 5007115))
+from_id = getenv("VVS_FROM", "5006333")
+to_id = getenv("VVS_TO", "5007115")
 limit = int(getenv("VVS_LIMIT", 10))
 check_time_offset = int(getenv("VVS_TIME_OFFSET_MINUTES", 12))
-flask_debug = bool(getenv("VVS_FLASK_DEBUG", False))
+
+print(f"\n\n")
+print(f"----- VVS Direct Connect ------------------------------")
+print(f"Copyright (c) 2021 aschuma (https://github.com/aschuma)")
+print(f"-------------------------------------------------------")
+print(f"\nSettings:")
+print(f"\t- VVS_FROM={from_id}\n\t- VVS_TO={to_id}\n\t- VVS_LIMIT={limit}\n\t- VVS_TIME_OFFSET_MINUTES={check_time_offset}\n\n")
 
 
 def check_time():
@@ -61,5 +68,5 @@ def after_request_func(data):
     return response
 
 
-if __name__ == '__main__':
-    app.run(debug=flask_debug)
+if __name__ == "__main__":
+    serve(app, host="0.0.0.0", port=5000)

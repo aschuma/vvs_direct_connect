@@ -4,7 +4,10 @@ Simple REST service providing connection data for a dedicated VVS connection. VV
 ## Start Server
 
 ```shell
-$ docker run --rm -p5000:5000 -ti -e VVS_FROM=de:08111:6118 -e VVS_TO=de:08116:7800  aschuma/vvs_direct_connect:latest
+$ docker run --rm -p5000:5000 -ti \
+   -e VVS_FROM=de:08111:6118 \
+   -e VVS_TO=de:08116:7800 \
+   aschuma/vvs_direct_connect:latest
 
 ----- VVS Direct Connect ------------------------------
 Copyright (c) 2021 aschuma (https://github.com/aschuma)

@@ -29,17 +29,24 @@ def iso_ts(date):
 
 
 def extract_data(connection):
-    planed = connection.origin.departure_time_planned
-    estimated = connection.origin.departure_time_estimated
-    delta = int((estimated - planed).total_seconds() / 60)
+    departure_planed = connection.origin.departure_time_planned
+    departure_estimated = connection.origin.departure_time_estimated
+    departure_delta = int((departure_estimated - departure_planed).total_seconds() / 60)
+    arrival_planed = connection.destination.arrival_time_planned
+    arrival_estimated = connection.destination.arrival_time_estimated
+    arrival_delta = int((arrival_estimated - arrival_planed).total_seconds() / 60)
     return {
         "from_id": from_id,
         "to_id": to_id,
         "from": connection.origin.name,
         "to": connection.destination.name,
-        "planned": iso_ts(planed),
-        "estimated": iso_ts(estimated),
-        "delay": delta
+        "departure_planned": iso_ts(departure_planed),
+        "departure_estimated": iso_ts(departure_estimated),
+        "departure_delay": departure_delta,
+        "arrival_planed": iso_ts(arrival_planed),
+        "arrival_estimated": iso_ts(arrival_estimated),
+        "arrival_delay": arrival_delta,
+        "number": connection.transportation.number
     }
 
 

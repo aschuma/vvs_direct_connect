@@ -30,34 +30,60 @@ $ curl 127.0.0.1:5000
   "status": 200,
   "trips": [
     {
-      "delay": 0,
-      "estimated": "2021-01-30T21:01:00Z",
+      "arrival_delay": 0,
+      "arrival_estimated": "2021-01-31T11:11:00Z",
+      "arrival_planed": "2021-01-31T11:11:00Z",
+      "departure_delay": 0,
+      "departure_estimated": "2021-01-31T11:01:00Z",
+      "departure_planned": "2021-01-31T11:01:00Z",
       "from": "Stuttgart Hauptbahnhof (oben)",
       "from_id": "de:08111:6118",
-      "planned": "2021-01-30T21:01:00Z",
+      "number": "RE5",
       "to": "Esslingen (N)",
       "to_id": "de:08116:7800"
     },
     {
-      "delay": 0,
-      "estimated": "2021-01-30T21:23:00Z",
+      "arrival_delay": 0,
+      "arrival_estimated": "2021-01-31T11:34:00Z",
+      "arrival_planed": "2021-01-31T11:34:00Z",
+      "departure_delay": 0,
+      "departure_estimated": "2021-01-31T11:23:00Z",
+      "departure_planned": "2021-01-31T11:23:00Z",
       "from": "Stuttgart Hauptbahnhof (oben)",
       "from_id": "de:08111:6118",
-      "planned": "2021-01-30T21:23:00Z",
+      "number": "RB18",
       "to": "Esslingen (N)",
       "to_id": "de:08116:7800"
     },
     {
-      "delay": 0,
-      "estimated": "2021-01-30T21:29:00Z",
+      "arrival_delay": 0,
+      "arrival_estimated": "2021-01-31T11:40:00Z",
+      "arrival_planed": "2021-01-31T11:40:00Z",
+      "departure_delay": 0,
+      "departure_estimated": "2021-01-31T11:29:00Z",
+      "departure_planned": "2021-01-31T11:29:00Z",
       "from": "Stuttgart Hauptbahnhof (oben)",
       "from_id": "de:08111:6118",
-      "planned": "2021-01-30T21:29:00Z",
+      "number": "RB16",
+      "to": "Esslingen (N)",
+      "to_id": "de:08116:7800"
+    },
+    {
+      "arrival_delay": 0,
+      "arrival_estimated": "2021-01-31T11:49:00Z",
+      "arrival_planed": "2021-01-31T11:49:00Z",
+      "departure_delay": 0,
+      "departure_estimated": "2021-01-31T11:40:00Z",
+      "departure_planned": "2021-01-31T11:40:00Z",
+      "from": "Stuttgart Hauptbahnhof (oben)",
+      "from_id": "de:08111:6118",
+      "number": "RE5",
       "to": "Esslingen (N)",
       "to_id": "de:08116:7800"
     }
   ]
 }
+
 
 ```
 ## Parameter

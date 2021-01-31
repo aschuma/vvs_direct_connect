@@ -1,7 +1,7 @@
 # VVS Direct Connect REST Service
 Simple REST service providing connection data for a dedicated VVS connection. VVS is the local public transport in Stuttgart. Only direct connections are supported.
 
-## Start server
+## Start Server
 
 ```shell
 $ docker run --rm -p5000:5000 -ti -e VVS_FROM=de:08111:6118 -e VVS_TO=de:08116:7800  aschuma/vvs_direct_connect:latest
@@ -64,9 +64,11 @@ $ curl 127.0.0.1:5000
 - `VVS_LIMIT` max number of trips to fetch
 - `VVS_TIME_OFFSET_MINUTES` walking distance to departure station
 
-## Obtaining the Station Ids
+## Obtaining the Station IDs
 
-Open VVS [https://www3.vvs.de/](https://www3.vvs.de/) in your browser. Enter origin and destination stations and click submit, e.g. `origin=Stuttgart` and `destination=Esslingen`:
+Please consult [https://www.openvvs.de/dataset/haltestellen](https://www.openvvs.de/dataset/haltestellen) to identify the origin and destination stations. 
+
+Alternatively, you can use the online timetable information to get the IDs. To do so, open VVS [https://www3.vvs.de/](https://www3.vvs.de/) in your browser. Enter origin and destination stations and click submit, e.g. `origin=Stuttgart` and `destination=Esslingen`:
 
 ![VVS](https://raw.githubusercontent.com/aschuma/vvs_direct_connect/main/doc/010_search.png)
 
@@ -80,3 +82,9 @@ Search for the `orig`and `dest`parameters and the associated values. In this cas
 
 ## Credits
 Credits to [Yannick](https://github.com/zaanposni) for [vvspy](https://pypi.org/project/vvspy/)
+
+## Further Information
+* [https://www.openvvs.de/](https://www.openvvs.de/)
+* [https://www.openvvs.de/dataset/haltestellen](https://www.openvvs.de/dataset/haltestellen)
+* [https://www.vdv.de/ip-kom-oev.aspx](https://www.vdv.de/ip-kom-oev.aspx)
+* [https://github.com/VDVde/TRIAS](https://github.com/VDVde/TRIAS)

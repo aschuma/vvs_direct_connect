@@ -15,7 +15,7 @@ Copyright (c) 2021 aschuma (https://github.com/aschuma)
 
 Settings:
 	- VVS_FROM=de:08111:6118
-	- VVS_TO=22de:08116:7800
+	- VVS_TO=de:08116:7800
 	- VVS_LIMIT=10
 	- VVS_TIME_OFFSET_MINUTES=12
 

@@ -2,7 +2,6 @@
 Simple REST service providing connection data for a dedicated VVS connection. VVS is the local public transport in Stuttgart. Only direct connections are supported.
 
 ## Start Server
-
 ```shell
 $ docker run --rm -p5000:5000 -ti \
    -e VVS_FROM=de:08111:6118 \
@@ -22,6 +21,13 @@ Settings:
 
 Serving on http://0.0.0.0:5000
 ```
+
+Supported platforms:
+
+* linux/amd64
+* linux/arm64
+* linux/arm/v7 (PI 4B)
+
 ## Call Rest Endpoint
 ```shell
 $ curl 127.0.0.1:5000

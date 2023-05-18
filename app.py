@@ -35,6 +35,8 @@ def extract_data(connection):
     arrival_planed = connection.destination.arrival_time_planned
     arrival_estimated = connection.destination.arrival_time_estimated
     arrival_delta = int((arrival_estimated - arrival_planed).total_seconds() / 60)
+
+    travel_time = int((arrival_estimated - departure_planed).total_seconds() / 60)
     return {
         "from_id": from_id,
         "to_id": to_id,
@@ -46,6 +48,7 @@ def extract_data(connection):
         "arrival_planed": iso_ts(arrival_planed),
         "arrival_estimated": iso_ts(arrival_estimated),
         "arrival_delay": arrival_delta,
+        "travel_time": travel_time,
         "number": connection.transportation.number
     }
 

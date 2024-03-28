@@ -5,6 +5,7 @@ from flask import Flask, jsonify
 from flask.helpers import make_response
 from waitress import serve
 import service.v1 as v1
+import service.v2 as v2
 
 
 from_id = getenv("VVS_FROM", "5006333")
@@ -32,6 +33,14 @@ app = Flask(__name__)
 def get_trips_v1():
     try:
         return jsonify({'trips': v1.find_trips(from_id, to_id, limit, check_time=check_time()), 'status': 200})
+    except Exception as e:
+        return jsonify({'message': str(e), 'status': 500}), 500
+
+
+@app.route('/api/v2/', methods=['GET'])
+def get_trips_v2():
+    try:
+        return jsonify({'trips': v2.find_trips(from_id, to_id, limit, check_time=check_time()), 'status': 200})
     except Exception as e:
         return jsonify({'message': str(e), 'status': 500}), 500
 

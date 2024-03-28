@@ -10,7 +10,7 @@ def iso_ts(date):
 
 def extract_data(connections):
     connection = connections[0]
-    last_connection = connections[-1]
+    last_connection = connections[len(connections) - 1]
     departure_planed = connection.origin.departure_time_planned
     departure_estimated = connection.origin.departure_time_estimated
     departure_delta = int(
@@ -23,14 +23,14 @@ def extract_data(connections):
     travel_time = int(
         (arrival_estimated - departure_planed).total_seconds() / 60)
 
-    number_list = [c.transportation.number for c in connections]    
-    number=",".join(number_list)
+    number_list = [c.transportation.number for c in connections]
+    number = ",".join(number_list)
 
     return {
         "from_id": connection.origin.id,
         "to_id": connection.destination.id,
-        "from": connection.origin.name,
-        "to": connection.destination.name,
+        "from": last_connection.origin.name,
+        "to": last_connection.destination.name,
         "departure_planned": iso_ts(departure_planed),
         "departure_estimated": iso_ts(departure_estimated),
         "departure_delay": departure_delta,
@@ -39,7 +39,18 @@ def extract_data(connections):
         "arrival_delay": arrival_delta,
         "travel_time": travel_time,
         "number": number,
-        "numbers": number_list
+        "numbers": number_list,
+        "details" : [ { 
+                "from": c.origin.name, 
+                "from_id": c.origin.id, 
+                "to" : c.destination.name,
+                "to_id" : c.destination.id, 
+                "number" : c.transportation.number,
+                "departure_planed" : connection.origin.departure_time_planned,
+                "departure_estimated" : connection.origin.departure_time_estimated,
+                "arrival_planed" : connection.destination.arrival_time_planned,
+                "arrival_estimated" : connection.destination.arrival_time_estimated
+            } for c in connections]
     }
 
 

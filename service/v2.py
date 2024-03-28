@@ -40,17 +40,17 @@ def extract_data(connections):
         "travel_time": travel_time,
         "number": number,
         "numbers": number_list,
-        "details" : [ { 
-                "from": c.origin.name, 
-                "from_id": c.origin.id, 
-                "to" : c.destination.name,
-                "to_id" : c.destination.id, 
-                "number" : c.transportation.number,
-                "departure_planed" : connection.origin.departure_time_planned,
-                "departure_estimated" : connection.origin.departure_time_estimated,
-                "arrival_planed" : connection.destination.arrival_time_planned,
-                "arrival_estimated" : connection.destination.arrival_time_estimated
-            } for c in connections]
+        "details": [{
+            "from": c.origin.name,
+            "from_id": c.origin.id,
+            "to": c.destination.name,
+            "to_id": c.destination.id,
+            "number": c.transportation.number,
+            "departure_planed": iso_ts(connection.origin.departure_time_planned),
+            "departure_estimated": iso_ts(connection.origin.departure_time_estimated),
+            "arrival_planed": iso_ts(connection.destination.arrival_time_planned),
+            "arrival_estimated": iso_ts(connection.destination.arrival_time_estimated)
+        } for c in connections]
     }
 
 

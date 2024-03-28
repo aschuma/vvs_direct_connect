@@ -14,7 +14,7 @@ check_time_offset = int(getenv("VVS_TIME_OFFSET_MINUTES", 12))
 
 print(f"\n\n")
 print(f"----- VVS Direct Connect -----------------------------------")
-print(f"Copyright (c) 2021-2023 aschuma (https://github.com/aschuma)")
+print(f"Copyright (c) 2021-2024 aschuma (https://github.com/aschuma)")
 print(f"------------------------------------------------------------")
 print(f"\nSettings:")
 print(f"\t- VVS_FROM={from_id}\n\t- VVS_TO={to_id}\n\t- VVS_LIMIT={limit}\n\t- VVS_TIME_OFFSET_MINUTES={check_time_offset}\n\n")

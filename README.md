@@ -2,11 +2,15 @@
 
 
 # VVS Direct Connect REST Service
-Simple REST service providing connection data for a dedicated VVS connection. VVS is the local public transport in Stuttgart. Only direct connections are supported.
+Simple REST service providing connection data for a dedicated VVS connection. VVS is the local public transport in Stuttgart. Only direct connections are supported by the REST endpoints `/api/v1`and `/`. The REST endpoint `/api/v2` also support intermdidate   
+
+The REST endpoints `/api/v1` and `/` (this is an alias for `/api/v1`) exclusively handle direct connections. Additionally, the `/api/v2` endpoint supports interchange stations.
+
+The REST endpoint `/api/v2` also supports addresses within the vvs area.
 
 ## Start Server
 ```shell
-$ docker run --rm -p5000:5000 -ti \
+$ docker run --rm -p15151:15151 -ti \
    -e VVS_FROM=de:08111:6118 \
    -e VVS_TO=de:08116:7800 \
    aschuma/vvs_direct_connect:latest
@@ -30,8 +34,11 @@ Supported platforms:
 * linux/arm/v7 (PI 4B)
 
 ## Call Rest Endpoint
+
+⚠️ Kindly note that the default port has been updated to 15151.
+
 ```shell
-$ curl 127.0.0.1:5000
+$ curl 127.0.0.1:15151/api/v2
 
 {
   "status": 200,
@@ -46,6 +53,7 @@ $ curl 127.0.0.1:5000
       "from": "Stuttgart Hauptbahnhof (oben)",
       "from_id": "de:08111:6118",
       "number": "MEX12",
+      "numbers": ["MEX12"],
       "to": "Esslingen (N)",
       "to_id": "de:08116:7800",
       "travel_time": 10
@@ -60,6 +68,7 @@ $ curl 127.0.0.1:5000
       "from": "Stuttgart Hauptbahnhof (oben)",
       "from_id": "de:08111:6118",
       "number": "MEX16",
+      "numbers": ["MEX16"],
       "to": "Esslingen (N)",
       "to_id": "de:08116:7800",
       "travel_time": 13
@@ -74,6 +83,7 @@ $ curl 127.0.0.1:5000
       "from": "Stuttgart Hauptbahnhof (oben)",
       "from_id": "de:08111:6118",
       "number": "MEX18",
+      "numbers": ["MEX18"],
       "to": "Esslingen (N)",
       "to_id": "de:08116:7800",
       "travel_time": 11
@@ -88,6 +98,7 @@ $ curl 127.0.0.1:5000
       "from": "Stuttgart Hauptbahnhof (tief)",
       "from_id": "de:08111:6118",
       "number": "S1",
+      "numbers": ["S1"],
       "to": "Esslingen (N)",
       "to_id": "de:08116:7800",
       "travel_time": 17

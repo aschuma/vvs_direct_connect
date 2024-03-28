@@ -8,18 +8,23 @@ def iso_ts(date):
     return date.strftime('%Y-%m-%dT%H:%M:%SZ')
 
 
-def extract_data(connection):
+def extract_data(connections):
+    connection = connections[0]
+    last_connection = connections[-1]
     departure_planed = connection.origin.departure_time_planned
     departure_estimated = connection.origin.departure_time_estimated
     departure_delta = int(
         (departure_estimated - departure_planed).total_seconds() / 60)
-    arrival_planed = connection.destination.arrival_time_planned
-    arrival_estimated = connection.destination.arrival_time_estimated
+    arrival_planed = last_connection.destination.arrival_time_planned
+    arrival_estimated = last_connection.destination.arrival_time_estimated
     arrival_delta = int(
         (arrival_estimated - arrival_planed).total_seconds() / 60)
 
     travel_time = int(
         (arrival_estimated - departure_planed).total_seconds() / 60)
+
+    number_list = [c.transportation.number for c in connections]    
+    number=",".join(number_list)
 
     return {
         "from_id": connection.origin.id,
@@ -33,12 +38,16 @@ def extract_data(connection):
         "arrival_estimated": iso_ts(arrival_estimated),
         "arrival_delay": arrival_delta,
         "travel_time": travel_time,
-        "number": connection.transportation.number
+        "number": number,
+        "numbers": number_list
     }
 
 
 def find_trips(from_id, to_id, limit, check_time):
     trips = get_trips(from_id, to_id, limit=limit, check_time=check_time)
-    trip_data_list = [extract_data(trip.connections[0])
-                      for trip in trips if len(trip.connections) == 1]
+    connections_list = [
+        [connection for connection in trip.connections if connection.transportation.number is not None] for trip in trips]
+
+    trip_data_list = [extract_data(connections)
+                      for connections in connections_list if len(connections) > 0]
     return trip_data_list

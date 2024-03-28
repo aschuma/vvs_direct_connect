@@ -2,11 +2,9 @@
 
 
 # VVS Direct Connect REST Service
-Simple REST service providing connection data for a dedicated VVS connection. VVS is the local public transport in Stuttgart. Only direct connections are supported by the REST endpoints `/api/v1`and `/`. The REST endpoint `/api/v2` also support intermdidate   
+Simple REST service providing connection data for a dedicated VVS connection. VVS is the local public transport in Stuttgart. 
 
 The REST endpoints `/api/v1` and `/` (this is an alias for `/api/v1`) exclusively handle direct connections. Additionally, the `/api/v2` endpoint supports interchange stations.
-
-The REST endpoint `/api/v2` also supports addresses within the vvs area.
 
 ## Start Server
 ```shell
@@ -129,6 +127,12 @@ Copy the Browser URL into a text editor:
 Search for the `orig`and `dest`parameters and the associated values. In this case `de:08111:6118` is the ID of the origin station (Stuttgart).  The ID of the destination station (Esslingen) is `de:08116:7800`.
 
 ![URL](https://raw.githubusercontent.com/aschuma/vvs_direct_connect/main/doc/030_url_parameter.png)
+
+## Address Support - Obtaining the Street IDs
+
+The REST endpoint `/api/v2` additionally provides also some support for addresses within the VVS area. The format for the address _Konrad Adenauer Str 32_ (Staatsgalerie) is as follows: `streetID:1500001775:32:8111000:51:Konrad-Adenauer-Straße:Stuttgart:Konrad-Adenauer-Straße::Konrad-Adenauer-Straße:70173:ANY:DIVA_SINGLEHOUSE:3513826:755185:NBWT:VVS:0`.
+
+You can also obtain the corresponding value through a VVS query as described above.
 
 ## Credits
 Credits to [Yannick](https://github.com/zaanposni) for [vvspy](https://pypi.org/project/vvspy/)

@@ -14,7 +14,7 @@ $ docker run --rm -p15151:15151 -ti \
    aschuma/vvs_direct_connect:latest
 
 ----- VVS Direct Connect -----------------------------------
-Copyright (c) 2021-2023 aschuma (https://github.com/aschuma)
+Copyright (c) 2021-2024 aschuma (https://github.com/aschuma)
 ------------------------------------------------------------
 
 Settings:
@@ -36,70 +36,130 @@ Supported platforms:
 ⚠️ Kindly note that the default port has been updated to 15151.
 
 ```shell
-$ curl 127.0.0.1:15151/api/v2
+$ curl 127.0.0.1:15151/api/v2/
 
 {
   "status": 200,
   "trips": [
     {
       "arrival_delay": 0,
-      "arrival_estimated": "2023-05-18T21:02:00Z",
-      "arrival_planed": "2023-05-18T21:02:00Z",
+      "arrival_estimated": "2024-04-02T09:14:00Z",
+      "arrival_planed": "2024-04-02T09:14:00Z",
       "departure_delay": 0,
-      "departure_estimated": "2023-05-18T20:52:00Z",
-      "departure_planned": "2023-05-18T20:52:00Z",
+      "departure_estimated": "2024-04-02T09:03:00Z",
+      "departure_planned": "2024-04-02T09:03:00Z",
+      "details": [
+        {
+          "arrival_estimated": "2024-04-02T09:14:00Z",
+          "arrival_planed": "2024-04-02T09:14:00Z",
+          "departure_estimated": "2024-04-02T09:03:00Z",
+          "departure_planed": "2024-04-02T09:03:00Z",
+          "from": "Stuttgart Hauptbahnhof (oben)",
+          "from_id": "de:08111:6115:6:12",
+          "number": "MEX16",
+          "to": "Esslingen (N)",
+          "to_id": "de:08116:7800:2:5"
+        }
+      ],
       "from": "Stuttgart Hauptbahnhof (oben)",
-      "from_id": "de:08111:6118",
-      "number": "MEX12",
-      "numbers": ["MEX12"],
-      "to": "Esslingen (N)",
-      "to_id": "de:08116:7800",
-      "travel_time": 10
-    },
-    {
-      "arrival_delay": 2,
-      "arrival_estimated": "2023-05-18T21:16:00Z",
-      "arrival_planed": "2023-05-18T21:14:00Z",
-      "departure_delay": 0,
-      "departure_estimated": "2023-05-18T21:03:00Z",
-      "departure_planned": "2023-05-18T21:03:00Z",
-      "from": "Stuttgart Hauptbahnhof (oben)",
-      "from_id": "de:08111:6118",
+      "from_id": "de:08111:6115:6:12",
       "number": "MEX16",
-      "numbers": ["MEX16"],
+      "numbers": [
+        "MEX16"
+      ],
       "to": "Esslingen (N)",
-      "to_id": "de:08116:7800",
-      "travel_time": 13
-    },
-    {
-      "arrival_delay": 0,
-      "arrival_estimated": "2023-05-18T21:34:00Z",
-      "arrival_planed": "2023-05-18T21:34:00Z",
-      "departure_delay": 0,
-      "departure_estimated": "2023-05-18T21:23:00Z",
-      "departure_planned": "2023-05-18T21:23:00Z",
-      "from": "Stuttgart Hauptbahnhof (oben)",
-      "from_id": "de:08111:6118",
-      "number": "MEX18",
-      "numbers": ["MEX18"],
-      "to": "Esslingen (N)",
-      "to_id": "de:08116:7800",
+      "to_id": "de:08116:7800:2:5",
       "travel_time": 11
     },
     {
       "arrival_delay": 0,
-      "arrival_estimated": "2023-05-18T21:42:00Z",
-      "arrival_planed": "2023-05-18T21:42:00Z",
+      "arrival_estimated": "2024-04-02T09:27:00Z",
+      "arrival_planed": "2024-04-02T09:27:00Z",
       "departure_delay": 1,
-      "departure_estimated": "2023-05-18T21:26:00Z",
-      "departure_planned": "2023-05-18T21:25:00Z",
+      "departure_estimated": "2024-04-02T09:11:00Z",
+      "departure_planned": "2024-04-02T09:10:00Z",
+      "details": [
+        {
+          "arrival_estimated": "2024-04-02T09:27:00Z",
+          "arrival_planed": "2024-04-02T09:27:00Z",
+          "departure_estimated": "2024-04-02T09:11:00Z",
+          "departure_planed": "2024-04-02T09:10:00Z",
+          "from": "Stuttgart Hauptbahnhof (tief)",
+          "from_id": "de:08111:6118:1:102",
+          "number": "S1",
+          "to": "Esslingen (N)",
+          "to_id": "de:08116:7800:1:8"
+        }
+      ],
       "from": "Stuttgart Hauptbahnhof (tief)",
-      "from_id": "de:08111:6118",
+      "from_id": "de:08111:6118:1:102",
       "number": "S1",
-      "numbers": ["S1"],
+      "numbers": [
+        "S1"
+      ],
       "to": "Esslingen (N)",
-      "to_id": "de:08116:7800",
+      "to_id": "de:08116:7800:1:8",
       "travel_time": 17
+    },
+    {
+      "arrival_delay": 0,
+      "arrival_estimated": "2024-04-02T09:42:00Z",
+      "arrival_planed": "2024-04-02T09:42:00Z",
+      "departure_delay": 1,
+      "departure_estimated": "2024-04-02T09:26:00Z",
+      "departure_planned": "2024-04-02T09:25:00Z",
+      "details": [
+        {
+          "arrival_estimated": "2024-04-02T09:42:00Z",
+          "arrival_planed": "2024-04-02T09:42:00Z",
+          "departure_estimated": "2024-04-02T09:26:00Z",
+          "departure_planed": "2024-04-02T09:25:00Z",
+          "from": "Stuttgart Hauptbahnhof (tief)",
+          "from_id": "de:08111:6118:1:102",
+          "number": "S1",
+          "to": "Esslingen (N)",
+          "to_id": "de:08116:7800:1:8"
+        }
+      ],
+      "from": "Stuttgart Hauptbahnhof (tief)",
+      "from_id": "de:08111:6118:1:102",
+      "number": "S1",
+      "numbers": [
+        "S1"
+      ],
+      "to": "Esslingen (N)",
+      "to_id": "de:08116:7800:1:8",
+      "travel_time": 17
+    },
+    {
+      "arrival_delay": 0,
+      "arrival_estimated": "2024-04-02T09:48:00Z",
+      "arrival_planed": "2024-04-02T09:48:00Z",
+      "departure_delay": 0,
+      "departure_estimated": "2024-04-02T09:39:00Z",
+      "departure_planned": "2024-04-02T09:39:00Z",
+      "details": [
+        {
+          "arrival_estimated": "2024-04-02T09:48:00Z",
+          "arrival_planed": "2024-04-02T09:48:00Z",
+          "departure_estimated": "2024-04-02T09:39:00Z",
+          "departure_planed": "2024-04-02T09:39:00Z",
+          "from": "Stuttgart Hauptbahnhof (oben)",
+          "from_id": "de:08111:6115:8:15",
+          "number": "RE5",
+          "to": "Esslingen (N)",
+          "to_id": "de:08116:7800:2:5"
+        }
+      ],
+      "from": "Stuttgart Hauptbahnhof (oben)",
+      "from_id": "de:08111:6115:8:15",
+      "number": "RE5",
+      "numbers": [
+        "RE5"
+      ],
+      "to": "Esslingen (N)",
+      "to_id": "de:08116:7800:2:5",
+      "travel_time": 9
     }
   ]
 }

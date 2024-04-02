@@ -28,8 +28,8 @@ def extract_data(connections):
 
     return {
         "from_id": connection.origin.id,
-        "to_id": connection.destination.id,
-        "from": last_connection.origin.name,
+        "from": connection.origin.name,
+        "to_id": last_connection.destination.id,
         "to": last_connection.destination.name,
         "departure_planned": iso_ts(departure_planed),
         "departure_estimated": iso_ts(departure_estimated),

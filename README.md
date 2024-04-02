@@ -4,7 +4,7 @@
 # VVS Direct Connect REST Service
 Simple REST service providing connection data for a dedicated VVS connection. VVS is the local public transport in Stuttgart. 
 
-The REST endpoints `/api/v1` and `/` (this is an alias for `/api/v1`) exclusively handle direct connections. Additionally, the `/api/v2` endpoint supports interchange stations.
+The REST endpoints `/api/v1/` and `/` (this is an alias for `/api/v1/`) exclusively handle direct connections. Additionally, the `/api/v2/` endpoint supports interchange stations.
 
 ## Start Server
 ```shell

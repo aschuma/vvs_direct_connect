@@ -1,4 +1,4 @@
-[![CodeQL](https://github.com/aschuma/vvs_direct_connect/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/aschuma/vvs_direct_connect/actions/workflows/codeql-analysis.yml)
+[![CodeQL](https://github.com/aschuma/vvs_direct_connect/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/aschuma/vvs_direct_connect/actions/workflows/codeql-analysis.yml) [![docker](https://github.com/aschuma/vvs_direct_connect/actions/workflows/docker.yml/badge.svg)](https://github.com/aschuma/vvs_direct_connect/actions/workflows/docker.yml)
 
 
 # VVS Direct Connect REST Service

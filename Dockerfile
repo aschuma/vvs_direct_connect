@@ -1,4 +1,4 @@
-FROM python:3.11.3-slim-buster
+FROM python:3.11-slim-bullseye
 
 WORKDIR /usr/src/app
 
@@ -11,7 +11,10 @@ ENV VVS_FROM="de:08116:2103" \
 
 COPY requirements.txt .
 
-RUN pip install --no-cache-dir -r requirements.txt
+RUN apt-get update \
+    && apt-get upgrade -y \
+    && apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* \
+    && pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 

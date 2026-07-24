@@ -45,6 +45,11 @@ def get_trips_v2():
         return jsonify({'message': str(e), 'status': 500}), 500
 
 
+@app.route('/health', methods=['GET'])
+def health():
+    return jsonify({'status': 200})
+
+
 @app.after_request
 def after_request_func(data):
     response = make_response(data)

@@ -1,4 +1,4 @@
-FROM python:3.13-slim-bookworm AS builder
+FROM python:3.13.5-slim-bookworm AS builder
 
 WORKDIR /usr/src/app
 
@@ -10,7 +10,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 
-FROM python:3.13-slim-bookworm
+FROM python:3.13.5-slim-bookworm
 
 WORKDIR /usr/src/app
 
@@ -25,7 +25,6 @@ ENV VVS_FROM="de:08116:2103" \
     PATH="/opt/venv/bin:$PATH"
 
 RUN apt-get update \
-    && apt-get upgrade -y \
     && apt-get clean autoclean && apt-get autoremove -y && rm -rf /var/lib/apt/lists/* \
     && useradd --system --create-home --shell /usr/sbin/nologin appuser
 

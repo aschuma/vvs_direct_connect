@@ -7,3 +7,8 @@ LICENSE
 __pycache__
 **/__pycache__
 *.py[cod]
+
+# Never ship any local virtualenv or uv cache into the build context.
+.venv
+venv
+.uv-cache

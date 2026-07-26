@@ -1,0 +1,17 @@
+[project]
+name = "vvs-direct-connect"
+version = "0.0.0"
+description = "Simple REST service returning VVS public-transport connection data."
+readme = "README.md"
+requires-python = ">=3.13"
+license = { file = "LICENSE" }
+dependencies = [
+    "flask",
+    "waitress",
+]
+
+[tool.uv]
+# This repository is a deployable application, not a library. There is
+# no wheel to build and nothing to `pip install`; uv only manages the
+# virtual environment and installs the declared dependencies.
+package = false

@@ -32,8 +32,9 @@ class FindTripsTest(unittest.TestCase):
         with patch.object(
             v1, "fetch_trips", side_effect=lambda *a, **k: _canned_trips(k["limit"])
         ):
-            trips = v1.find_trips("A", "B", limit=10, check_time=datetime(2026, 5, 1))
+            response = v1.find_trips("A", "B", limit=10, check_time=datetime(2026, 5, 1))
 
+        trips = response["trips"]
         # Fixture has 3 journeys: 1 direct-with-transport, 1 interchange
         # (3 legs), 1 walk-only (1 leg). The interchange journey is
         # dropped; the direct and walk-only single-leg trips remain.
@@ -45,9 +46,9 @@ class FindTripsTest(unittest.TestCase):
         with patch.object(
             v1, "fetch_trips", side_effect=lambda *a, **k: _canned_trips(k["limit"])
         ):
-            trips = v1.find_trips("A", "B", limit=10, check_time=datetime(2026, 5, 1))
+            response = v1.find_trips("A", "B", limit=10, check_time=datetime(2026, 5, 1))
 
-        trip = trips[0]
+        trip = response["trips"][0]
         self.assertEqual(trip["from"], "Stuttgart Hbf (tief)")
         self.assertEqual(trip["to"], "Esslingen (N)")
         self.assertEqual(trip["number"], "S1")
@@ -64,7 +65,7 @@ class FindTripsTest(unittest.TestCase):
         with patch.object(
             v1, "fetch_trips", side_effect=lambda *a, **k: _canned_trips(k["limit"])
         ):
-            trip = v1.find_trips("A", "B", limit=10, check_time=datetime(2026, 5, 1))[0]
+            trip = v1.find_trips("A", "B", limit=10, check_time=datetime(2026, 5, 1))["trips"][0]
 
         self.assertEqual(
             set(trip.keys()),
@@ -75,6 +76,17 @@ class FindTripsTest(unittest.TestCase):
                 "travel_time", "number",
             },
         )
+
+    def test_response_envelope(self) -> None:
+        """The v1 response is always wrapped in the standard envelope."""
+        with patch.object(
+            v1, "fetch_trips", side_effect=lambda *a, **k: _canned_trips(k["limit"])
+        ):
+            response = v1.find_trips("A", "B", limit=10, check_time=datetime(2026, 5, 1))
+
+        self.assertEqual(set(response.keys()), {"trips", "status"})
+        self.assertEqual(response["status"], 200)
+        self.assertIsInstance(response["trips"], list)
 
 
 class PartialPayloadTest(unittest.TestCase):
@@ -114,9 +126,9 @@ class PartialPayloadTest(unittest.TestCase):
                 self._PAYLOAD_WITH_INCOMPLETE_LEG, k["limit"]
             ),
         ):
-            trips = v1.find_trips("A", "B", limit=10, check_time=datetime(2026, 5, 1))
+            response = v1.find_trips("A", "B", limit=10, check_time=datetime(2026, 5, 1))
 
-        self.assertEqual(trips, [])
+        self.assertEqual(response["trips"], [])
 
 
 if __name__ == "__main__":

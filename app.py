@@ -59,15 +59,13 @@ def _print_banner() -> None:
     Deliberately uses ``print`` so the banner shows up on stdout even
     when logging has not yet been configured.
     """
-    print("\n")
-    print("----- VVS Direct Connect -----------------------------------")
-    print("Copyright (c) 2021-2024 aschuma (https://github.com/aschuma)")
-    print("------------------------------------------------------------")
-    print("\nSettings:")
-    print(f"\t- VVS_FROM={FROM_ID}")
-    print(f"\t- VVS_TO={TO_ID}")
-    print(f"\t- VVS_LIMIT={LIMIT}")
-    print(f"\t- VVS_TIME_OFFSET_MINUTES={CHECK_TIME_OFFSET_MINUTES}\n\n")
+    print(
+        f"\n\n----- VVS Direct Connect -----------------------------------\n"
+        f"Copyright (c) 2021-2024 aschuma (https://github.com/aschuma)\n"
+        f"------------------------------------------------------------\n\nSettings:\n"
+        f"\t- VVS_FROM={FROM_ID}\n\t- VVS_TO={TO_ID}\n"
+        f"\t- VVS_LIMIT={LIMIT}\n\t- VVS_TIME_OFFSET_MINUTES={CHECK_TIME_OFFSET_MINUTES}\n\n"
+    )
 
 
 _print_banner()
@@ -89,37 +87,36 @@ def _check_time() -> datetime:
 app = Flask(__name__)
 
 
-def _trips_response(trips: list[dict[str, Any]]) -> Response:
-    """Wrap a list of trip dicts in the standard success envelope."""
-    return jsonify({"trips": trips, "status": 200})
-
-
 def _error_response(exc: Exception) -> tuple[Response, int]:
-    """Wrap an unexpected exception in the standard error envelope."""
+    """Wrap an unexpected exception in the standard error envelope.
+
+    The error envelope stays in the HTTP layer because it is tied to
+    exception handling and HTTP status codes, which are not service
+    concerns. The mirror success envelope is produced by the service
+    modules themselves.
+    """
     return jsonify({"message": str(exc), "status": 500}), 500
+
+
+def _get_trips(service_func: Any) -> Response | tuple[Response, int]:
+    """Call ``service_func`` with the configured station ids and return JSON."""
+    try:
+        return jsonify(service_func(FROM_ID, TO_ID, LIMIT, check_time=_check_time()))
+    except Exception as exc:
+        return _error_response(exc)
 
 
 @app.route("/api/v1/", methods=["GET"])
 @app.route("/", methods=["GET"])
 def get_trips_v1() -> Response | tuple[Response, int]:
     """Return direct connections (single-leg trips) as JSON."""
-    try:
-        return _trips_response(
-            v1.find_trips(FROM_ID, TO_ID, LIMIT, check_time=_check_time())
-        )
-    except Exception as exc:
-        return _error_response(exc)
+    return _get_trips(v1.find_trips)
 
 
 @app.route("/api/v2/", methods=["GET"])
 def get_trips_v2() -> Response | tuple[Response, int]:
     """Return multi-leg (interchange) trips as JSON."""
-    try:
-        return _trips_response(
-            v2.find_trips(FROM_ID, TO_ID, LIMIT, check_time=_check_time())
-        )
-    except Exception as exc:
-        return _error_response(exc)
+    return _get_trips(v2.find_trips)
 
 
 @app.route("/health", methods=["GET"])

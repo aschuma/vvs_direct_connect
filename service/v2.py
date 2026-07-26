@@ -16,7 +16,13 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any
 
-from service._shared import has_line_number, is_fully_timed, iso_ts, minutes_between
+from service._shared import (
+    has_line_number,
+    is_fully_timed,
+    iso_ts,
+    minutes_between,
+    to_success_response,
+)
 from service.vvs_client import Leg, Trip, fetch_trips
 
 
@@ -72,16 +78,6 @@ def _as_multi_leg_trip(legs: tuple[Leg, ...]) -> dict[str, Any]:
     }
 
 
-def _shapeable(leg: Leg) -> bool:
-    """Return ``True`` when ``leg`` is served by transport and fully timed.
-
-    Combines :func:`has_line_number` and :func:`is_fully_timed`:
-    walking transfers are removed *and* legs with missing timestamps
-    (which would break serialisation) are excluded.
-    """
-    return has_line_number(leg) and is_fully_timed(leg)
-
-
 def _transport_legs(trip: Trip) -> tuple[Leg, ...]:
     """Return the subset of ``trip``'s legs eligible for v2 shaping.
 
@@ -90,7 +86,7 @@ def _transport_legs(trip: Trip) -> tuple[Leg, ...]:
     downstream shaping only sees legs that can be rendered end-to-end
     without ``null`` values in the response.
     """
-    return tuple(filter(_shapeable, trip.legs))
+    return tuple(leg for leg in trip.legs if has_line_number(leg) and is_fully_timed(leg))
 
 
 def find_trips(
@@ -98,8 +94,12 @@ def find_trips(
     to_id: str,
     limit: int,
     check_time: datetime,
-) -> list[dict[str, Any]]:
-    """Return multi-leg trips between two stations.
+) -> dict[str, Any]:
+    """Return multi-leg trips between two stations, enveloped.
+
+    The return value is the full JSON body the ``/api/v2/`` endpoint
+    serves: ``{"trips": [...], "status": 200}``. HTTP handlers only
+    have to :func:`flask.jsonify` it.
 
     Parameters
     ----------
@@ -115,8 +115,8 @@ def find_trips(
         Point in time to plan for.
     """
     trips = fetch_trips(from_id, to_id, check_time=check_time, limit=limit)
-    return [
+    return to_success_response([
         _as_multi_leg_trip(legs)
         for legs in (_transport_legs(trip) for trip in trips)
         if legs
-    ]
+    ])

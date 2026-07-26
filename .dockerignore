@@ -12,3 +12,8 @@ __pycache__
 .venv
 venv
 .uv-cache
+
+# Tests are executed outside the runtime image (via `uv run python -m
+# unittest ...`); shipping them serves no purpose and just enlarges
+# the image.
+tests

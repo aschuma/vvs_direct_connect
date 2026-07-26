@@ -5,7 +5,13 @@ from __future__ import annotations
 import unittest
 from datetime import datetime
 
-from service._shared import has_line_number, is_fully_timed, iso_ts, minutes_between
+from service._shared import (
+    has_line_number,
+    is_fully_timed,
+    iso_ts,
+    minutes_between,
+    to_success_response,
+)
 from service.vvs_client import Leg, Stop
 
 
@@ -71,6 +77,18 @@ class IsFullyTimedTest(unittest.TestCase):
 
     def test_false_when_all_timestamps_missing(self) -> None:
         self.assertFalse(is_fully_timed(Leg(_stop(), _stop(), "S1")))
+
+
+class ToSuccessResponseTest(unittest.TestCase):
+    def test_wraps_trips_and_sets_status_200(self) -> None:
+        trips = [{"number": "S1"}]
+        self.assertEqual(
+            to_success_response(trips),
+            {"trips": trips, "status": 200},
+        )
+
+    def test_empty_trip_list_is_preserved(self) -> None:
+        self.assertEqual(to_success_response([]), {"trips": [], "status": 200})
 
 
 if __name__ == "__main__":

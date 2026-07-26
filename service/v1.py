@@ -11,7 +11,12 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Any
 
-from service._shared import is_fully_timed, iso_ts, minutes_between
+from service._shared import (
+    is_fully_timed,
+    iso_ts,
+    minutes_between,
+    to_success_response,
+)
 from service.vvs_client import Leg, Trip, fetch_trips
 
 
@@ -40,11 +45,6 @@ def _as_direct_trip(leg: Leg) -> dict[str, Any]:
     }
 
 
-def _is_direct(trip: Trip) -> bool:
-    """Return ``True`` when ``trip`` consists of exactly one leg."""
-    return len(trip.legs) == 1
-
-
 def _is_shapeable(trip: Trip) -> bool:
     """Return ``True`` when ``trip`` can be rendered as a v1 response.
 
@@ -53,7 +53,7 @@ def _is_shapeable(trip: Trip) -> bool:
     with partial timing are dropped rather than serialised with
     ``null`` values, keeping the response schema consistent.
     """
-    return _is_direct(trip) and is_fully_timed(trip.legs[0])
+    return len(trip.legs) == 1 and is_fully_timed(trip.legs[0])
 
 
 def find_trips(
@@ -61,8 +61,12 @@ def find_trips(
     to_id: str,
     limit: int,
     check_time: datetime,
-) -> list[dict[str, Any]]:
-    """Return the direct connections between two stations.
+) -> dict[str, Any]:
+    """Return the direct connections between two stations, enveloped.
+
+    The return value is the full JSON body the ``/api/v1/`` endpoint
+    serves: ``{"trips": [...], "status": 200}``. HTTP handlers only
+    have to :func:`flask.jsonify` it.
 
     Parameters
     ----------
@@ -79,4 +83,6 @@ def find_trips(
         Point in time to plan for.
     """
     trips = fetch_trips(from_id, to_id, check_time=check_time, limit=limit)
-    return [_as_direct_trip(trip.legs[0]) for trip in trips if _is_shapeable(trip)]
+    return to_success_response(
+        [_as_direct_trip(trip.legs[0]) for trip in trips if _is_shapeable(trip)]
+    )

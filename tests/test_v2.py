@@ -25,7 +25,18 @@ class FindTripsTest(unittest.TestCase):
         with patch.object(
             v2, "fetch_trips", side_effect=lambda *a, **k: _canned_trips(k["limit"])
         ):
-            return v2.find_trips("A", "B", limit=10, check_time=datetime(2026, 5, 1))
+            return v2.find_trips("A", "B", limit=10, check_time=datetime(2026, 5, 1))["trips"]
+
+    def test_response_envelope(self) -> None:
+        """The v2 response is always wrapped in the standard envelope."""
+        with patch.object(
+            v2, "fetch_trips", side_effect=lambda *a, **k: _canned_trips(k["limit"])
+        ):
+            response = v2.find_trips("A", "B", limit=10, check_time=datetime(2026, 5, 1))
+
+        self.assertEqual(set(response.keys()), {"trips", "status"})
+        self.assertEqual(response["status"], 200)
+        self.assertIsInstance(response["trips"], list)
 
     def test_walk_only_trip_is_dropped(self) -> None:
         # Fixture has 3 journeys; one is walk-only and must not appear.
@@ -119,7 +130,7 @@ class PartialPayloadTest(unittest.TestCase):
                 self._PAYLOAD_WITH_MIXED_LEGS, k["limit"]
             ),
         ):
-            trips = v2.find_trips("A", "B", limit=10, check_time=datetime(2026, 5, 1))
+            trips = v2.find_trips("A", "B", limit=10, check_time=datetime(2026, 5, 1))["trips"]
 
         # Only the fully timed leg survives; journey shape holds.
         self.assertEqual(len(trips), 1)

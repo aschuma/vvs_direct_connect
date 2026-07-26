@@ -7,3 +7,13 @@ LICENSE
 __pycache__
 **/__pycache__
 *.py[cod]
+
+# Never ship any local virtualenv or uv cache into the build context.
+.venv
+venv
+.uv-cache
+
+# Tests are executed outside the runtime image (via `uv run python -m
+# unittest ...`); shipping them serves no purpose and just enlarges
+# the image.
+tests

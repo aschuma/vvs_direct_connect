@@ -2,9 +2,11 @@
 
 
 # VVS Direct Connect REST Service
-Simple REST service providing connection data for a dedicated VVS connection. VVS is the local public transport in Stuttgart. 
+Simple REST service providing connection data for a dedicated VVS connection. VVS is the local public transport in Stuttgart.
 
 The REST endpoints `/api/v1/` and `/` (this is an alias for `/api/v1/`) exclusively handle direct connections. Additionally, the `/api/v2/` endpoint supports interchange stations.
+
+The service talks directly to the public VVS EFA endpoint (`https://www3.vvs.de/mngvvs/XML_TRIP_REQUEST2`) using the standard library. The runtime footprint is intentionally small: [Flask](https://flask.palletsprojects.com/) for the HTTP layer and [waitress](https://docs.pylonsproject.org/projects/waitress/) as the WSGI server.
 
 ## Start Server
 ```shell
@@ -29,7 +31,31 @@ Supported platforms:
 
 * linux/amd64
 * linux/arm64
-* linux/arm/v7 (PI 4B)
+
+## Local Development
+
+The project uses [uv](https://docs.astral.sh/uv/) for Python and dependency management. Install it once (see the [uv install instructions](https://docs.astral.sh/uv/getting-started/installation/)); the required Python version (3.13) is pinned in `.python-version` and will be downloaded automatically by uv if it is not already available.
+
+Common tasks:
+
+```shell
+# create the virtualenv and install runtime dependencies
+$ uv sync
+
+# run the server (listens on http://127.0.0.1:15151)
+$ VVS_FROM=de:08111:6118 VVS_TO=de:08116:7800 uv run python app.py
+
+# run the test suite
+$ uv run python -m unittest discover -s tests
+
+# add a new runtime dependency
+$ uv add <package>
+
+# refresh the lockfile to the latest compatible versions
+$ uv lock --upgrade
+```
+
+The lockfile (`uv.lock`) is committed and is the single source of truth for the resolved dependency graph. `uv sync --frozen` will reject any drift.
 
 ## Call Rest Endpoint
 
@@ -44,16 +70,16 @@ $ curl 127.0.0.1:15151/api/v2/
     {
       "arrival_delay": 0,
       "arrival_estimated": "2024-04-02T09:14:00Z",
-      "arrival_planed": "2024-04-02T09:14:00Z",
+      "arrival_planned": "2024-04-02T09:14:00Z",
       "departure_delay": 0,
       "departure_estimated": "2024-04-02T09:03:00Z",
       "departure_planned": "2024-04-02T09:03:00Z",
       "details": [
         {
           "arrival_estimated": "2024-04-02T09:14:00Z",
-          "arrival_planed": "2024-04-02T09:14:00Z",
+          "arrival_planned": "2024-04-02T09:14:00Z",
           "departure_estimated": "2024-04-02T09:03:00Z",
-          "departure_planed": "2024-04-02T09:03:00Z",
+          "departure_planned": "2024-04-02T09:03:00Z",
           "from": "Stuttgart Hauptbahnhof (oben)",
           "from_id": "de:08111:6115:6:12",
           "number": "MEX16",
@@ -74,16 +100,16 @@ $ curl 127.0.0.1:15151/api/v2/
     {
       "arrival_delay": 0,
       "arrival_estimated": "2024-04-02T09:27:00Z",
-      "arrival_planed": "2024-04-02T09:27:00Z",
+      "arrival_planned": "2024-04-02T09:27:00Z",
       "departure_delay": 1,
       "departure_estimated": "2024-04-02T09:11:00Z",
       "departure_planned": "2024-04-02T09:10:00Z",
       "details": [
         {
           "arrival_estimated": "2024-04-02T09:27:00Z",
-          "arrival_planed": "2024-04-02T09:27:00Z",
+          "arrival_planned": "2024-04-02T09:27:00Z",
           "departure_estimated": "2024-04-02T09:11:00Z",
-          "departure_planed": "2024-04-02T09:10:00Z",
+          "departure_planned": "2024-04-02T09:10:00Z",
           "from": "Stuttgart Hauptbahnhof (tief)",
           "from_id": "de:08111:6118:1:102",
           "number": "S1",
@@ -104,16 +130,16 @@ $ curl 127.0.0.1:15151/api/v2/
     {
       "arrival_delay": 0,
       "arrival_estimated": "2024-04-02T09:42:00Z",
-      "arrival_planed": "2024-04-02T09:42:00Z",
+      "arrival_planned": "2024-04-02T09:42:00Z",
       "departure_delay": 1,
       "departure_estimated": "2024-04-02T09:26:00Z",
       "departure_planned": "2024-04-02T09:25:00Z",
       "details": [
         {
           "arrival_estimated": "2024-04-02T09:42:00Z",
-          "arrival_planed": "2024-04-02T09:42:00Z",
+          "arrival_planned": "2024-04-02T09:42:00Z",
           "departure_estimated": "2024-04-02T09:26:00Z",
-          "departure_planed": "2024-04-02T09:25:00Z",
+          "departure_planned": "2024-04-02T09:25:00Z",
           "from": "Stuttgart Hauptbahnhof (tief)",
           "from_id": "de:08111:6118:1:102",
           "number": "S1",
@@ -134,16 +160,16 @@ $ curl 127.0.0.1:15151/api/v2/
     {
       "arrival_delay": 0,
       "arrival_estimated": "2024-04-02T09:48:00Z",
-      "arrival_planed": "2024-04-02T09:48:00Z",
+      "arrival_planned": "2024-04-02T09:48:00Z",
       "departure_delay": 0,
       "departure_estimated": "2024-04-02T09:39:00Z",
       "departure_planned": "2024-04-02T09:39:00Z",
       "details": [
         {
           "arrival_estimated": "2024-04-02T09:48:00Z",
-          "arrival_planed": "2024-04-02T09:48:00Z",
+          "arrival_planned": "2024-04-02T09:48:00Z",
           "departure_estimated": "2024-04-02T09:39:00Z",
-          "departure_planed": "2024-04-02T09:39:00Z",
+          "departure_planned": "2024-04-02T09:39:00Z",
           "from": "Stuttgart Hauptbahnhof (oben)",
           "from_id": "de:08111:6115:8:15",
           "number": "RE5",

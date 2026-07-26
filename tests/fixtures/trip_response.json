@@ -1,0 +1,96 @@
+{
+  "journeys": [
+    {
+      "legs": [
+        {
+          "duration": 1380,
+          "origin": {
+            "id": "de:08111:6118",
+            "name": "Stuttgart Hbf (tief)",
+            "departureTimePlanned": "2026-05-01T10:00:00Z",
+            "departureTimeEstimated": "2026-05-01T10:02:00Z"
+          },
+          "destination": {
+            "id": "de:08116:7800",
+            "name": "Esslingen (N)",
+            "arrivalTimePlanned": "2026-05-01T10:23:00Z",
+            "arrivalTimeEstimated": "2026-05-01T10:25:00Z"
+          },
+          "transportation": {"number": "S1"}
+        }
+      ]
+    },
+    {
+      "legs": [
+        {
+          "duration": 600,
+          "origin": {
+            "id": "de:08111:6333",
+            "name": "Bad Cannstatt",
+            "departureTimePlanned": "2026-05-01T11:00:00Z",
+            "departureTimeEstimated": "2026-05-01T11:00:00Z"
+          },
+          "destination": {
+            "id": "de:08111:6115",
+            "name": "Stuttgart Hbf (oben)",
+            "arrivalTimePlanned": "2026-05-01T11:10:00Z",
+            "arrivalTimeEstimated": "2026-05-01T11:12:00Z"
+          },
+          "transportation": {"number": "S3"}
+        },
+        {
+          "duration": 300,
+          "origin": {
+            "id": "de:08111:6115",
+            "name": "Stuttgart Hbf (oben)",
+            "departureTimePlanned": "2026-05-01T11:15:00Z",
+            "departureTimeEstimated": "2026-05-01T11:16:00Z"
+          },
+          "destination": {
+            "id": "de:08111:6115:walk",
+            "name": "Stuttgart Hbf transfer",
+            "arrivalTimePlanned": "2026-05-01T11:20:00Z",
+            "arrivalTimeEstimated": "2026-05-01T11:20:00Z"
+          },
+          "transportation": {"number": null}
+        },
+        {
+          "duration": 900,
+          "origin": {
+            "id": "de:08111:6115",
+            "name": "Stuttgart Hbf (oben)",
+            "departureTimePlanned": "2026-05-01T11:25:00Z",
+            "departureTimeEstimated": "2026-05-01T11:26:00Z"
+          },
+          "destination": {
+            "id": "de:08115:7115",
+            "name": "Hulb",
+            "arrivalTimePlanned": "2026-05-01T11:40:00Z",
+            "arrivalTimeEstimated": "2026-05-01T11:41:00Z"
+          },
+          "transportation": {"number": "S1"}
+        }
+      ]
+    },
+    {
+      "legs": [
+        {
+          "duration": 300,
+          "origin": {
+            "id": "walk-a",
+            "name": "Walk start",
+            "departureTimePlanned": "2026-05-01T12:00:00Z",
+            "departureTimeEstimated": "2026-05-01T12:00:00Z"
+          },
+          "destination": {
+            "id": "walk-b",
+            "name": "Walk end",
+            "arrivalTimePlanned": "2026-05-01T12:05:00Z",
+            "arrivalTimeEstimated": "2026-05-01T12:05:00Z"
+          },
+          "transportation": {"number": null}
+        }
+      ]
+    }
+  ]
+}

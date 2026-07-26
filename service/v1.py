@@ -1,44 +1,88 @@
+"""Trip lookup limited to direct (single-leg) connections.
 
-from os import getenv
-from datetime import datetime, timedelta
-from vvspy.trip import get_trips
+Exposes :func:`find_trips`, which queries the VVS EFA endpoint and
+returns only those journeys that consist of exactly one leg -- i.e.
+no interchange, no walking transfer. Each returned trip is shaped as
+a JSON-serialisable ``dict`` suitable for the ``/api/v1/`` endpoint.
+"""
+
+from __future__ import annotations
+
+from datetime import datetime
+from typing import Any
+
+from service._shared import (
+    is_fully_timed,
+    iso_ts,
+    minutes_between,
+    to_success_response,
+)
+from service.vvs_client import Leg, Trip, fetch_trips
 
 
-def iso_ts(date):
-    return date.strftime('%Y-%m-%dT%H:%M:%SZ')
+def _as_direct_trip(leg: Leg) -> dict[str, Any]:
+    """Shape a single leg into the v1 response dict.
 
-
-def extract_data(connection):
-    departure_planed = connection.origin.departure_time_planned
-    departure_estimated = connection.origin.departure_time_estimated
-    departure_delta = int(
-        (departure_estimated - departure_planed).total_seconds() / 60)
-    arrival_planed = connection.destination.arrival_time_planned
-    arrival_estimated = connection.destination.arrival_time_estimated
-    arrival_delta = int(
-        (arrival_estimated - arrival_planed).total_seconds() / 60)
-
-    travel_time = int(
-        (arrival_estimated - departure_planed).total_seconds() / 60)
-
+    The returned dict carries the origin and destination identity,
+    the planned and estimated departure/arrival timestamps, the
+    corresponding delays in minutes, the total travel time and the
+    line number serving the connection.
+    """
+    origin, destination = leg.origin, leg.destination
     return {
-        "from_id": connection.origin.id,
-        "to_id": connection.destination.id,
-        "from": connection.origin.name,
-        "to": connection.destination.name,
-        "departure_planned": iso_ts(departure_planed),
-        "departure_estimated": iso_ts(departure_estimated),
-        "departure_delay": departure_delta,
-        "arrival_planed": iso_ts(arrival_planed),
-        "arrival_estimated": iso_ts(arrival_estimated),
-        "arrival_delay": arrival_delta,
-        "travel_time": travel_time,
-        "number": connection.transportation.number
+        "from_id": origin.id,
+        "to_id": destination.id,
+        "from": origin.name,
+        "to": destination.name,
+        "departure_planned": iso_ts(origin.planned),
+        "departure_estimated": iso_ts(origin.estimated),
+        "departure_delay": minutes_between(origin.estimated, origin.planned),
+        "arrival_planned": iso_ts(destination.planned),
+        "arrival_estimated": iso_ts(destination.estimated),
+        "arrival_delay": minutes_between(destination.estimated, destination.planned),
+        "travel_time": minutes_between(destination.estimated, origin.planned),
+        "number": leg.line_number,
     }
 
 
-def find_trips(from_id, to_id, limit, check_time):
-    trips = get_trips(from_id, to_id, limit=limit, check_time=check_time)
-    trip_data_list = [extract_data(trip.connections[0])
-                      for trip in trips if len(trip.connections) == 1]
-    return trip_data_list
+def _is_shapeable(trip: Trip) -> bool:
+    """Return ``True`` when ``trip`` can be rendered as a v1 response.
+
+    A trip is shapeable when it consists of exactly one leg *and* that
+    leg carries complete timing information on both endpoints. Legs
+    with partial timing are dropped rather than serialised with
+    ``null`` values, keeping the response schema consistent.
+    """
+    return len(trip.legs) == 1 and is_fully_timed(trip.legs[0])
+
+
+def find_trips(
+    from_id: str,
+    to_id: str,
+    limit: int,
+    check_time: datetime,
+) -> dict[str, Any]:
+    """Return the direct connections between two stations, enveloped.
+
+    The return value is the full JSON body the ``/api/v1/`` endpoint
+    serves: ``{"trips": [...], "status": 200}``. HTTP handlers only
+    have to :func:`flask.jsonify` it.
+
+    Parameters
+    ----------
+    from_id:
+        Departure station id.
+    to_id:
+        Arrival station id.
+    limit:
+        Upper bound for the number of trips fetched from the EFA API.
+        The number of returned direct trips may be lower once
+        interchange journeys and trips with partial timing information
+        have been filtered out.
+    check_time:
+        Point in time to plan for.
+    """
+    trips = fetch_trips(from_id, to_id, check_time=check_time, limit=limit)
+    return to_success_response(
+        [_as_direct_trip(trip.legs[0]) for trip in trips if _is_shapeable(trip)]
+    )

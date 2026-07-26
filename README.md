@@ -220,6 +220,9 @@ The REST endpoint `/api/v2` additionally provides also some support for addresse
 
 You can also obtain the corresponding value through a VVS query as described above.
 
+## Credits
+Credits to [Yannick](https://github.com/zaanposni) for [vvspy](https://pypi.org/project/vvspy/)
+
 ## Further Information
 * [https://www.openvvs.de/](https://www.openvvs.de/)
 * [https://www.openvvs.de/dataset/haltestellen](https://www.openvvs.de/dataset/haltestellen)

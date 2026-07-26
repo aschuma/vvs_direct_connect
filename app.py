@@ -35,6 +35,7 @@ from typing import Any
 
 from flask import Flask, Response, jsonify
 from waitress import serve
+from werkzeug.exceptions import HTTPException
 
 import service.v1 as v1
 import service.v2 as v2
@@ -98,6 +99,23 @@ def _error_response(exc: Exception) -> tuple[Response, int]:
     return jsonify({"message": str(exc), "status": 500}), 500
 
 
+@app.errorhandler(HTTPException)
+def _json_http_error(exc: HTTPException) -> tuple[Response, int]:
+    """Render every HTTP error (404, 405, 400, ...) as JSON.
+
+    Without this handler Flask returns its default HTML error page
+    for routing/method mistakes, which is unhelpful for API clients
+    that expect JSON. Using a single handler for ``HTTPException``
+    covers every subclass (``NotFound``, ``MethodNotAllowed``, etc.)
+    with the same envelope shape ``{"message", "status"}`` that
+    :func:`_error_response` uses for server-side failures.
+    """
+    return (
+        jsonify({"message": exc.description, "status": exc.code}),
+        exc.code or 500,
+    )
+
+
 def _get_trips(service_func: Any) -> Response | tuple[Response, int]:
     """Call ``service_func`` with the configured station ids and return JSON."""
     try:
@@ -125,16 +143,11 @@ def health() -> Response:
     return jsonify({"status": 200})
 
 
-@app.after_request
-def _force_json_content_type(response: Response) -> Response:
-    """Ensure every response advertises ``application/json``.
-
-    Flask's :func:`jsonify` already sets this header, but the hook
-    guarantees the behaviour even for custom responses added in the
-    future.
-    """
-    response.headers["Content-Type"] = "application/json"
-    return response
+# Note: no after_request hook forces ``Content-Type: application/json``.
+# Every response in this app is produced through :func:`flask.jsonify`
+# (route handlers, error envelopes, HTTPException handler), which
+# already sets the correct header. A blanket rewrite would mislabel
+# any future non-JSON response (e.g. HTML from an added debug page).
 
 
 # --------------------------------------------------------------------------- #

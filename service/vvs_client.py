@@ -294,10 +294,14 @@ def fetch_trips(
     )
     request = Request(url, headers={"Accept": "application/json"})
 
-    with urlopen(request, timeout=timeout) as response:
-        if response.status != 200:
-            raise RuntimeError(f"VVS API returned HTTP {response.status}")
-        payload = json.loads(response.read().decode("utf-8"))
+    from urllib.error import HTTPError
 
+    try:
+        with urlopen(request, timeout=timeout) as response:
+            if response.status != 200:
+                raise RuntimeError(f"VVS API returned HTTP {response.status}")
+            payload = json.loads(response.read().decode("utf-8"))
+    except HTTPError as exc:
+        raise RuntimeError(f"VVS API returned HTTP {exc.code}") from exc
     _logger.debug("VVS API returned %d journey(s)", len(payload.get("journeys") or []))
     return parse_response(payload, limit)

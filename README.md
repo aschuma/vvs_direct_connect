@@ -6,7 +6,7 @@ Simple REST service providing connection data for a dedicated VVS connection. VV
 
 The REST endpoints `/api/v1/` and `/` (this is an alias for `/api/v1/`) exclusively handle direct connections. Additionally, the `/api/v2/` endpoint supports interchange stations.
 
-The service talks directly to the public VVS EFA endpoint (`https://www3.vvs.de/mngvvs/XML_TRIP_REQUEST2`) using the standard library only – no third-party VVS client is required. The runtime footprint is intentionally small: [Flask](https://flask.palletsprojects.com/) for the HTTP layer and [waitress](https://docs.pylonsproject.org/projects/waitress/) as the WSGI server.
+The service talks directly to the public VVS EFA endpoint (`https://www3.vvs.de/mngvvs/XML_TRIP_REQUEST2`) using the standard library. The runtime footprint is intentionally small: [Flask](https://flask.palletsprojects.com/) for the HTTP layer and [waitress](https://docs.pylonsproject.org/projects/waitress/) as the WSGI server.
 
 ## Start Server
 ```shell

@@ -9,7 +9,7 @@ Jinja2==3.1.6
 MarkupSafe==3.0.3
 requests==2.34.2
 typing==3.7.4.3
-urllib3==2.7.0
+urllib3==2.8.0
 vvspy==2.3.1
 waitress==3.0.2
 Werkzeug==3.1.8
